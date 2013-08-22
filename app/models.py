@@ -32,6 +32,6 @@ class DailyShareRate(models.Model):
     low_limit_price = models.FloatField(verbose_name="Price: Low")
 
 
-class StockExchange(models.Model):
-    name = models.CharField(max_length=30, verbose_name="Exchange name")
-    country = models.ForeignKey(Country, verbose_name="Country")
+#class StockExchange(models.Model):
+    #name = models.CharField(max_length=30, verbose_name="Exchange name")
+    #country = models.ForeignKey(Country, verbose_name="Country")
