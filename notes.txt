@@ -1,0 +1,9 @@
+Währungsumrechnung
+- Aktuelle Kurse
+- Template Tag
+
+Börsen
+-
+
+Aktien
+- Historie holen
