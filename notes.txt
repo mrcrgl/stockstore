@@ -1,9 +1,53 @@
-Währungsumrechnung
-- Aktuelle Kurse
-- Template Tag
 
-Börsen
+
+StockExchange
+- currency
+- name
+- country
+- close_time
 -
 
-Aktien
-- Historie holen
+Currency
+- name
+- sign
+- symbol
+-> last_rate(from=EUR)
+
+CurrencyExchangeRate
+- date
+- from
+- to
+- rate
+
+Sector
+- name
+- parent
+
+Company
+- name
+- country
+
+Stocks
+- type (share, resource (rohstoff), fond, bond (anleihe))
+- sector
+- company
+- name
+- symbol
+- isin (not mandatory)
+- wkn (not mandatory)
+- default exchange
+- branche
+-> Historie holen
+
+StockDividend
+- stock
+- date
+- value
+
+StockRate
+- high
+- low
+- last trade
+- volume
+- exchange
+- stock
