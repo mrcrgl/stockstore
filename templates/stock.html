@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <div class="col-8">
+        <fieldset>
+            <legend>Bla</legend>
+
+            {{ stock }}
+        </fieldset>
+
+    </div>
+    <div class="col-4">
+        <fieldset>
+            <legend>Options</legend>
+            <a href="{% url 'stock_get_history' stock.symbol %}" class="btn btn-block btn-danger">Fetch historic data</a>
+        </fieldset>
+    </div>
+
+{% endblock %}

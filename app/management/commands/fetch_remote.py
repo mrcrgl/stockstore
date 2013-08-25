@@ -1,7 +1,7 @@
 __author__ = 'riegel'
 
 from django.core.management.base import BaseCommand, CommandError
-from app.models import Share, DailyShareRate
+from app.models import *
 from app.remote.stocks import StockStorageClient
 from pprint import pprint
 
@@ -9,13 +9,15 @@ from pprint import pprint
 class Command(BaseCommand):
     def handle(self, *args, **options):
         client = StockStorageClient()
-        shares = Share.objects.filter()
+        stocks = Stock.objects.filter()
 
-        for share in shares:
-            self.stdout.write("Proceed Share %s" % share.name)
+        from app.models import StockRate, StockExchange
+
+        for stock in stocks:
+            self.stdout.write("Proceed Stock %s" % stock.name)
             result = client.request(
                 options=[
-                    'ask',
+                    #'ask',
                     'currency',
                     'commission',
                     'dividend',
@@ -42,9 +44,49 @@ class Command(BaseCommand):
                     'volume',
                     'stock_exchange',
                 ],
-                symbol=share.symbol
+                symbol=stock.symbol
             )
 
-            pprint(result)
+            """
+            TODO
+            Check if stock has changed, if its -> change it and notify about it
+            Add the new rates
+            """
 
-            #raise CommandError('Test Error')
+            """
+            stock = models.ForeignKey(Stock, verbose_name="Share", db_index=True)
+            date = models.DateField(default=datetime.now(), verbose_name="Close date", db_index=True)
+            stock_exchange = models.ForeignKey(StockExchange, verbose_name="Stock Exchange")
+            volume = models.IntegerField(verbose_name="Volume of trades")
+            volume_avg = models.IntegerField(verbose_name="Avg volume of trades")
+            last_trade_price = models.FloatField(verbose_name="Price: Close")
+            high_limit_price = models.FloatField(verbose_name="Price: High")
+            low_limit_price = models.FloatField(verbose_name="Price: Low")
+            """
+
+            exchange = StockExchange.objects.get(symbol_yahoo=result['stock_exchange'])
+
+            if not exchange:
+                raise NotImplementedError("Stock exchange with symbol '%s' not found." % result.stock_exchange)
+
+            try:
+                stock_rate = StockRate.objects.get(
+                    stock=stock,
+                    date=result['last_trade_date'],
+                    stock_exchange=exchange
+                )
+            except StockRate.DoesNotExist:
+                stock_rate = StockRate()
+
+            stock_rate.last_trade_price = result['last_trade_price']
+            stock_rate.high_limit_price = result['days_high']
+            stock_rate.low_limit_price = result['days_low']
+            stock_rate.volume = result['volume']
+            stock_rate.volume_avg = result['volume']
+            stock_rate.stock = stock
+            stock_rate.date = result['last_trade_date']
+            stock_rate.stock_exchange = exchange
+            stock_rate.save()
+
+            #pprint(result)
+            #if stock.num_shares != result['']

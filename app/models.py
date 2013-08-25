@@ -25,7 +25,12 @@ class CurrencyExchangeRate(models.Model):
 class StockExchange(models.Model):
     currency = models.ForeignKey(Currency, verbose_name="Currency")
     name = models.CharField(max_length=30, verbose_name="Name")
+    symbol_yahoo = models.CharField(max_length=30, verbose_name="Symbol (Yahoo)")
+    symbol_finanzennet = models.CharField(max_length=30, verbose_name="Symbol (finanzen.net)")
     country = CountryField(verbose_name="Country", default="DE")
+
+    def __unicode__(self):
+        return self.name
 
 
 class Company(models.Model):
@@ -94,6 +99,10 @@ class StockRate(models.Model):
     low_limit_price = models.FloatField(verbose_name="Price: Low")
 
 
-#class StockExchange(models.Model):
-    #name = models.CharField(max_length=30, verbose_name="Exchange name")
+class StockSplit(models.Model):
+    stock = models.ForeignKey(Stock, verbose_name="Share", db_index=True)
+    date = models.DateField(default=datetime.now(), verbose_name="Date", db_index=True)
+    stock_exchange = models.ForeignKey(StockExchange, verbose_name="Stock Exchange")
+    num_shares_before = models.IntegerField(verbose_name="Number of Shares before", null=True, blank=True)
+    num_shares_after = models.IntegerField(verbose_name="Number of Shares after", null=True, blank=True)
     #country = models.ForeignKey(Country, verbose_name="Country")

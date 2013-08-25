@@ -14,4 +14,14 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^$', 'app.views.dashboard', name='dashboard'),
+
+    url(r'^stock/(?P<symbol>\w+)/$', 'app.views.stock', name='stock'),
+    url(r'^stock/(?P<symbol>\w+)/get_history/$', 'app.views.stock_fetch_history', name='stock_get_history'),
+
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='fe_login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='fe_logout'),
+    url(r'^accounts/password_change/$', 'django.contrib.auth.views.password_change', name='fe_password_change'),
+    url(r'^accounts/password_change_done/$', 'django.contrib.auth.views.login', name='password_change_done'),
 )

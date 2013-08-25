@@ -1,0 +1,72 @@
+{% extends "core/base.html" %}
+{% load i18n admin_static widget_tweaks %}
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}"/>{% endblock %}
+
+{% block bodyclass %}login{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block branding %}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-8 col-offset-2">
+            {% if form.errors and not form.non_field_errors and not form.this_is_the_login_form.errors %}
+                <div class="alert alert-error">
+                    <a class="close" data-dismiss="alert" href="#">x</a>
+                    {% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please
+                        correct the errors below.{% endblocktrans %}
+                </div>
+            {% endif %}
+
+            {% if form.non_field_errors or form.this_is_the_login_form.errors %}
+                {% for error in form.non_field_errors|add:form.this_is_the_login_form.errors %}
+                    <div class="alert alert-error">
+                        <a class="close" data-dismiss="alert" href="#">x</a>{{ error }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-4 col-offset-4">
+            <div class="well">
+                <form method="POST" action="{{ app_path }}" accept-charset="UTF-8"
+                      class="form-horizontal form-signin">{% csrf_token %}
+                    <fieldset>
+                        <legend>{% trans "Login" %}</legend>
+
+                        <div class="form-group">
+                            {% render_field form.username id="loginUsername" class="form-control" placeholder=form.username.label %}
+                        </div>
+                        <div class="form-group">
+                            {% render_field form.password id="loginPassword" class="form-control" placeholder=form.password.label %}
+                        </div>
+                        {% url 'admin_password_reset' as password_reset_url %}
+                        {% if password_reset_url %}
+                            <div class="password-reset-link">
+                                <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+                            </div>
+                        {% endif %}
+
+                        <input type="hidden" name="this_is_the_login_form" value="1" />
+                        <input type="hidden" name="next" value="{{ next }}" />
+                        <button type="submit" class="btn btn-default">{% trans "Login" %}</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('id_username').focus()
+    </script>
+    </div>
+{% endblock %}

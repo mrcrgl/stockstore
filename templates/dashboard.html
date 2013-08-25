@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+
+
+{% block content %}
+Dashboard
+
+<ul>
+    {% for stock in stocks %}
+        <li><a href="{% url 'stock' stock.symbol %}">{{ stock }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
