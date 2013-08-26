@@ -17,8 +17,12 @@ urlpatterns = patterns('',
 
     url(r'^$', 'app.views.dashboard', name='dashboard'),
 
+    url(r'^stock_search/$', 'app.views.stock_search', name='stock_search'),
+    url(r'^add_stock/$', 'app.views.stock_add', name='add_stock'),
+
     url(r'^stock/(?P<symbol>\w+)/$', 'app.views.stock', name='stock'),
     url(r'^stock/(?P<symbol>\w+)/get_history/$', 'app.views.stock_fetch_history', name='stock_get_history'),
+    url(r'^stock/(?P<symbol>\w+)/get_json/$', 'app.views.stock_rates_json', name='stock_rates_json'),
 
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='fe_login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='fe_logout'),

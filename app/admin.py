@@ -14,7 +14,8 @@ class CurrencyExchangeRateAdmin(admin.ModelAdmin):
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('name', 'country',)
+    list_filter = ('country',)
     pass
 
 
@@ -24,22 +25,33 @@ class SectorAdmin(admin.ModelAdmin):
 
 
 class StockAdmin(admin.ModelAdmin):
-    list_display = ('name', 'symbol', )
-    pass
+    list_display = ('name', 'country', 'sector', 'type', 'symbols', )
+
+    def symbols(self, obj):
+        return "%s / %s / %s" % (obj.symbol, obj.wkn, obj.isin)
+
+    def country(self, obj):
+        return obj.company.country
+
+    symbols.short_description = "Symbol / WKN / ISIN"
+
+    list_filter = ('type', 'sector',)
 
 
 class StockRateAdmin(admin.ModelAdmin):
-    list_display = ('stock', 'date', 'last_trade_price', )
+    list_display = ('stock', 'stock_exchange', 'date', 'close', )
+    list_filter = ('stock', 'stock_exchange', )
     pass
 
 
 class StockDividendAdmin(admin.ModelAdmin):
     list_display = ('stock', 'date', 'value', )
+    list_filter = ('stock',)
     pass
 
 
 class StockExchangeAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('name', 'symbol_yahoo', 'symbol_finanzennet')
     pass
 
 

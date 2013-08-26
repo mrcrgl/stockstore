@@ -19,28 +19,29 @@ class Command(BaseCommand):
                 options=[
                     #'ask',
                     'currency',
-                    'commission',
+                    #'commission',
                     'dividend',
                     'dividend_share',
                     'last_trade_date',
                     'trade_date',
                     'days_low',
-                    'holdings_gain_percent',
+                    #'holdings_gain_percent',
                     'annualized_gain',
-                    'holdings_gain',
-                    'holdings_gain_percent_realtime',
-                    'holdings_gain_realtime',
+                    #'holdings_gain',
+                    #'holdings_gain_percent_realtime',
+                    #'holdings_gain_realtime',
                     'days_high',
                     'market_capitalization',  # Mkt Cap.
-                    'market_capitalization_realtime',
-                    'ebitda',  # This is the share value?
+                    #'market_capitalization_realtime',
+                    #'ebitda',  # This is the share value?
                     'last_trade_price',
                     'high_limit',
                     'low_limit',
+                    'open',
                     'name',
-                    'shares_owned',
+                    #'shares_owned',
                     'short_ratio',
-                    'last_trade_time',
+                    #'last_trade_time',
                     'volume',
                     'stock_exchange',
                 ],
@@ -78,11 +79,11 @@ class Command(BaseCommand):
             except StockRate.DoesNotExist:
                 stock_rate = StockRate()
 
-            stock_rate.last_trade_price = result['last_trade_price']
-            stock_rate.high_limit_price = result['days_high']
-            stock_rate.low_limit_price = result['days_low']
+            stock_rate.close = result['last_trade_price']
+            stock_rate.high = result['days_high']
+            stock_rate.low = result['days_low']
+            stock_rate.open = result['open']
             stock_rate.volume = result['volume']
-            stock_rate.volume_avg = result['volume']
             stock_rate.stock = stock
             stock_rate.date = result['last_trade_date']
             stock_rate.stock_exchange = exchange

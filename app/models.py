@@ -25,8 +25,9 @@ class CurrencyExchangeRate(models.Model):
 class StockExchange(models.Model):
     currency = models.ForeignKey(Currency, verbose_name="Currency")
     name = models.CharField(max_length=30, verbose_name="Name")
-    symbol_yahoo = models.CharField(max_length=30, verbose_name="Symbol (Yahoo)")
-    symbol_finanzennet = models.CharField(max_length=30, verbose_name="Symbol (finanzen.net)")
+    symbol_yahoo = models.CharField(max_length=30, verbose_name="Symbol (Yahoo)", blank=True)
+    suffix_yahoo = models.CharField(max_length=30, verbose_name="Suffix (Yahoo)", blank=True)
+    symbol_finanzennet = models.CharField(max_length=30, verbose_name="Symbol (finanzen.net)", blank=True)
     country = CountryField(verbose_name="Country", default="DE")
 
     def __unicode__(self):
@@ -72,7 +73,17 @@ class Stock(models.Model):
     sector = models.ForeignKey(Sector, db_index=True, verbose_name="Sector", null=True, blank=True)
     company = models.ForeignKey(Company, verbose_name="Company", db_index=True, default="DE")
     currency = models.ForeignKey(Currency, verbose_name="Currency", null=True, blank=True)
-    default_stock_exchange = models.ForeignKey(StockExchange, verbose_name="Default Stock Exchange", null=True, blank=True)
+    default_stock_exchange = models.ForeignKey(
+        StockExchange,
+        verbose_name="Default Stock Exchange",
+        null=True,
+        blank=True
+    )
+    enabled_stock_exchanges = models.ManyToManyField(
+        StockExchange,
+        verbose_name="Enabled stock exchanges",
+        related_name="enabled_stock_exchanges"
+    )
     wkn = models.CharField(max_length=6, verbose_name="WKN", db_index=True, null=True, blank=True)
     isin = models.CharField(max_length=12, verbose_name="ISIN", db_index=True, null=True, blank=True)
     symbol = models.CharField(max_length=30, verbose_name="Symbol", db_index=True, null=True, blank=True)
@@ -93,10 +104,10 @@ class StockRate(models.Model):
     date = models.DateField(default=datetime.now(), verbose_name="Close date", db_index=True)
     stock_exchange = models.ForeignKey(StockExchange, verbose_name="Stock Exchange")
     volume = models.IntegerField(verbose_name="Volume of trades")
-    volume_avg = models.IntegerField(verbose_name="Avg volume of trades")
-    last_trade_price = models.FloatField(verbose_name="Price: Close")
-    high_limit_price = models.FloatField(verbose_name="Price: High")
-    low_limit_price = models.FloatField(verbose_name="Price: Low")
+    open = models.FloatField(verbose_name="Price: Low")
+    close = models.FloatField(verbose_name="Price: Close")
+    high = models.FloatField(verbose_name="Price: High")
+    low = models.FloatField(verbose_name="Price: Low")
 
 
 class StockSplit(models.Model):

@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 col-xs-12">
+            <fieldset>
+                <legend>{% trans Stock %}</legend>
+
+                {{ form.errors }}
+                <form action="{% url 'add_stock' %}" method="POST" role="form"
+                      class="form-horizontal" enctype="application/x-www-form-urlencoded">{% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="form-controls">
+                        <input type="submit" class="btn btn-success" value="{% trans "Save" %}" />
+                    </div>
+                </form>
+
+            </fieldset>
+
+        </div>
+    </div>
+
+{% endblock %}

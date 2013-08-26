@@ -15,3 +15,11 @@ def clear_quotation_marks(string_to_clear):
         string_to_clear = string_to_clear[:-1]
 
     return string_to_clear
+
+
+def is_wkn(string):
+    return re.match(r'^[0-9A-Z]{6}$', string)
+
+
+def is_isin(string):
+    return re.match(r'^([A-Z]{2})([0-9A-Z]{10})$', string)
